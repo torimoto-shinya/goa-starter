@@ -24,13 +24,19 @@ var _ = Resource("bottle", func() {                // Resources group related AP
                 Description("Get bottle by id")    // with its path, parameters (both path
                 Routing(GET("/:bottleID"))         // parameters and querystring values) and payload
                 Params(func() {                    // (shape of the request body).
-                        Param("bottleID", Integer, "Bottle ID")
+                        Param("bottleID", Integer, "Bottle ID") //リクエストパラメータ
                 })
-                Payload(BottlePayload)
                 Response(OK)                       // Responses define the shape and status code
                 Response(NotFound)                 // of HTTP responses.
         })
+        Action("create", func() {
+                Description("Create new bottle")
+                Routing(POST(""))
+                Payload(CreateBottlePayload)
+                Response(OK)
+        })
 })
+
 
 // メディアタイプの定義
 // メディアタイプはレスポンスの形式
@@ -51,8 +57,8 @@ var BottleMedia = MediaType("application/vnd.bottle+json", func() {  //慣習的
 })
 
 // ペイロードの定義
-// ペイロードはリクエストの形式
-var BottlePayload = Type("BottlePayload", func() {
+// ペイロードはリクエストボディの形式（POST, PUT, PATCHを想定）
+var CreateBottlePayload = Type("BottlePayload", func() {
         Member("bottleID", Integer, "Bottle ID", func(){
                 Minimum(0)
                 Maximum(127)
